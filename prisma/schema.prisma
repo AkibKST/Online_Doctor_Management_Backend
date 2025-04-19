@@ -7,6 +7,55 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+// user model
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  password String
+  role UserRole
+  needPasswordChange Boolean @default(false)
+  status UserStatus
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  admin Admin?
+
+  @@map ("users")
+}
+//-----------------------------------
+
+// admin model
+model Admin {
+  id String @id @default(uuid())
+  email String @unique
+  profilePhoto String?
+  contactNumber String
+  isDeleted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [email], references: [email])
+
+  @@map ("admins")
+}
+//-----------------------------------
+
+// role of each user
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  DOCTOR
+  PATIENT
+}
+//-----------------------------------
+
+// status of each user
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+}
+//-----------------------------------
