@@ -7,9 +7,9 @@ import httpStatus from "http-status";
 //get all admin data from DB
 const getAllFromDB: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
-    // console.log(req.query)
+    // console.log(req.query);
 
-    const result = await AdminServices.getAllFromDB();
+    const result = await AdminServices.getAllFromDB(req.query);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
