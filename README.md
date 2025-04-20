@@ -1,11 +1,13 @@
-# PH HealthCare Server
+# HealthCare Server
 
-Welcome to the backend repository for PH HealthCare, a tutorial project developed as part of the "Level 2 Web Development Course" offered by Programming Hero.
+# Typescript & PostgresSQL
+
+Welcome to the backend repository for HealthCare, a tutorial project developed as part of my Development .
 
 This repository contains the backend codebase responsible for handling server-side logic, database management, and communication between different system components.
 
 <!-- ## Table of Contents
-- [PH HealthCare Backend](#ph-healthcare-backend)
+- [HealthCare Backend](#healthcare-backend)
   - [Table of Contents](#table-of-contents)
   - [Technologies Used](#technologies-used)
   - [Features](#features)
