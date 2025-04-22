@@ -4,15 +4,17 @@ import { AdminServices } from "./admin.service";
 import sendResponse from "../../../sharedUtils/sendResponse";
 import httpStatus from "http-status";
 import pick from "../../../sharedUtils/pick";
+import { adminSearchAbleFields } from "./admin.constant";
 
 //get all admin data from DB
 const getAllFromDB: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     //Selecting Valid Data Fields Using the pick Function
-    pick(req.query, ["name", "email", "searchTerm", "contactNumber"]);
-    // console.log(req.query);
+    const filters = pick(req.query, adminSearchAbleFields);
+    const options = pick(req.query, ["limit", "page"]);
+    console.log(options, "options");
 
-    const result = await AdminServices.getAllFromDB(req.query);
+    const result = await AdminServices.getAllFromDB(filters, options);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,

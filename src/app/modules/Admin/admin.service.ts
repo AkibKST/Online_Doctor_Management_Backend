@@ -1,12 +1,14 @@
 import { Prisma, PrismaClient } from "../../../../generated/prisma";
+import { adminSearchAbleFields } from "./admin.constant";
 
 const prisma = new PrismaClient();
 
-const getAllFromDB = async (params: any) => {
+const getAllFromDB = async (params: any, options: any) => {
+  const { limit, page } = options;
+
   //if searchTerm is present in query params, then add it to the where condition
   const { searchTerm, ...filterData } = params;
   const andCondition: Prisma.AdminWhereInput[] = [];
-  const adminSearchAbleFields = ["name", "email"];
 
   // console.log(filterData, "filterData");
   if (params.searchTerm) {
@@ -37,6 +39,8 @@ const getAllFromDB = async (params: any) => {
   const result = await prisma.admin.findMany({
     //where searchTerm contains in name or email
     where: whereCondition,
+    skip: (Number(page) - 1) * limit,
+    take: Number(limit),
   });
   return result;
 };
@@ -44,3 +48,11 @@ const getAllFromDB = async (params: any) => {
 export const AdminServices = {
   getAllFromDB,
 };
+
+/**
+ * data = 1 2 3 4 5 6 7 8
+ * page = 2
+ * limit = 2
+ * skip
+ * formula = (page - 1) * limit
+ */
