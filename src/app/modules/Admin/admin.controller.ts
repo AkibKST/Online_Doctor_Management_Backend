@@ -43,7 +43,26 @@ const getAdminById: RequestHandler = catchAsync(
 );
 //--------------------------------------
 
+// update the admin by id in db
+const updateAdminById: RequestHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    console.log(id, "id", req.body, "body");
+    // console.log(req.params.id, "id");
+    const result = await AdminServices.updateAdminById(id, req.body);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Updated Admin data successfully!",
+      data: result,
+    });
+  }
+);
+//--------------------------------------
+
 export const AdminControllers = {
   getAllFromDB,
   getAdminById,
+  updateAdminById,
 };

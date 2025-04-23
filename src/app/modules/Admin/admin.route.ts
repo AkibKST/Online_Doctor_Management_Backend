@@ -7,4 +7,6 @@ router.get("/", AdminControllers.getAllFromDB);
 
 router.get("/:id", AdminControllers.getAdminById);
 
+router.patch("/:id", AdminControllers.updateAdminById);
+
 export const AdminRoutes = router;
