@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import catchAsync from "../../../sharedUtils/catchAsync";
 import { AdminServices } from "./admin.service";
 import sendResponse from "../../../sharedUtils/sendResponse";

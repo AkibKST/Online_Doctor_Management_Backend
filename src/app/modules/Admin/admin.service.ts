@@ -1,33 +1,10 @@
-import { Prisma, PrismaClient } from "../../../../generated/prisma";
+import { Prisma } from "../../../../generated/prisma";
+import { paginationHelpers } from "../../../helpers/paginationHelper";
+import prisma from "../../../sharedUtils/prisma";
 import { adminSearchAbleFields } from "./admin.constant";
 
-const prisma = new PrismaClient();
-
-const calculatePagination = (options: {
-  page?: number;
-  limit?: number;
-  skip?: number;
-  sortBy?: string;
-  sortOrder?: string;
-}) => {
-  const page: number = Number(options.page) || 1;
-  const limit: number = Number(options.limit) || 10;
-  const skip: number = (Number(page) - 1) * limit;
-
-  const sortBy: string = options.sortBy || "createdAt";
-  const sortOrder: string = options.sortOrder || "desc";
-
-  return {
-    page,
-    limit,
-    skip,
-    sortBy,
-    sortOrder,
-  };
-};
-
 const getAllFromDB = async (params: any, options: any) => {
-  const { limit, page, skip } = calculatePagination(options);
+  const { limit, page, skip } = paginationHelpers.calculatePagination(options);
 
   //if searchTerm is present in query params, then add it to the where condition
   const { searchTerm, ...filterData } = params;
