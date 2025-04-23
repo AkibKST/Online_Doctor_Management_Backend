@@ -7,10 +7,11 @@ const getAllFromDB = async (params: any, options: any) => {
   const { limit, page, skip } = paginationHelpers.calculatePagination(options);
 
   //if searchTerm is present in query params, then add it to the where condition
+  // console.log(params);
   const { searchTerm, ...filterData } = params;
   const andCondition: Prisma.AdminWhereInput[] = [];
 
-  // console.log(filterData, "filterData");
+  // console.log(searchTerm, "searchTerm");
   if (params.searchTerm) {
     andCondition.push({
       OR: adminSearchAbleFields.map((field) => ({
@@ -27,7 +28,7 @@ const getAllFromDB = async (params: any, options: any) => {
     andCondition.push({
       AND: Object.keys(filterData).map((key) => ({
         [key]: {
-          equals: filterData[key],
+          equals: (filterData as any)[key],
         },
       })),
     });
@@ -50,11 +51,35 @@ const getAllFromDB = async (params: any, options: any) => {
             createdAt: "desc",
           },
   });
+
+  const total = await prisma.admin.count({
+    where: whereCondition,
+  });
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  };
+};
+
+const getAdminById = async (id: string) => {
+  // console.log(id, "id");
+  const result = await prisma.admin.findUnique({
+    where: {
+      id,
+    },
+  });
+
   return result;
 };
 
 export const AdminServices = {
   getAllFromDB,
+  getAdminById,
 };
 
 /**

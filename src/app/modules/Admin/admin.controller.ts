@@ -20,6 +20,23 @@ const getAllFromDB: RequestHandler = catchAsync(
       statusCode: httpStatus.OK,
       success: true,
       message: "Admin data fetched!",
+      meta: result.meta,
+      data: result.data,
+    });
+  }
+);
+//--------------------------------------
+
+//Get single admin data by id from database
+const getAdminById: RequestHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    // console.log(req.params.id, "id");
+    const result = await AdminServices.getAdminById(req.params.id);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Admin data fetched!",
       data: result,
     });
   }
@@ -28,4 +45,5 @@ const getAllFromDB: RequestHandler = catchAsync(
 
 export const AdminControllers = {
   getAllFromDB,
+  getAdminById,
 };
