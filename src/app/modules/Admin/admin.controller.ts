@@ -11,8 +11,8 @@ const getAllFromDB: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     //Selecting Valid Data Fields Using the pick Function
     const filters = pick(req.query, adminSearchAbleFields);
-    const options = pick(req.query, ["limit", "page"]);
-    console.log(options, "options");
+    const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
+    // console.log(options, "options");
 
     const result = await AdminServices.getAllFromDB(filters, options);
 
