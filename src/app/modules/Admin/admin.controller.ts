@@ -61,11 +61,27 @@ const updateAdminById: RequestHandler = catchAsync(
 );
 //--------------------------------------
 
-// update the admin by id in db
+// hard delete the admin by id in db
 const deleteAdminById: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     const { id } = req.params;
     const result = await AdminServices.deletedAdminById(id);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Deleted Admin data successfully!",
+      data: result,
+    });
+  }
+);
+//--------------------------------------
+
+// soft delete the admin by id in db
+const softDeleteAdminById: RequestHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await AdminServices.softDeletedAdminById(id);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -82,4 +98,5 @@ export const AdminControllers = {
   getAdminById,
   updateAdminById,
   deleteAdminById,
+  softDeleteAdminById,
 };
