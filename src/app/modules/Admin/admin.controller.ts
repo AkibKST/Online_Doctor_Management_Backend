@@ -47,7 +47,7 @@ const getAdminById: RequestHandler = catchAsync(
 const updateAdminById: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    console.log(id, "id", req.body, "body");
+    // console.log(id, "id", req.body, "body");
     // console.log(req.params.id, "id");
     const result = await AdminServices.updateAdminById(id, req.body);
 
@@ -61,8 +61,25 @@ const updateAdminById: RequestHandler = catchAsync(
 );
 //--------------------------------------
 
+// update the admin by id in db
+const deleteAdminById: RequestHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await AdminServices.deletedAdminById(id);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Deleted Admin data successfully!",
+      data: result,
+    });
+  }
+);
+//--------------------------------------
+
 export const AdminControllers = {
   getAllFromDB,
   getAdminById,
   updateAdminById,
+  deleteAdminById,
 };
