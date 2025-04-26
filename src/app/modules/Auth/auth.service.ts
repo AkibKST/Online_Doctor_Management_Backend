@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import AppError from "../../error/AppError";
 import httpStatus from "http-status";
 import { jwtHelpers } from "../../../helpers/jwtHelpers";
+import jwt from "jsonwebtoken";
 
 //Login user service
 const loginUser = async (payload: { email: string; password: string }) => {
@@ -51,7 +52,32 @@ const loginUser = async (payload: { email: string; password: string }) => {
 
 //refresh token service
 const refreshToken = async (token: string) => {
-  console.log(token);
+  let decodedData;
+  try {
+    decodedData = jwt.verify(token, "secret_Key_For_refresh_Token");
+  } catch (err) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!");
+  }
+
+  const userData = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: decodedData?.email,
+    },
+  });
+
+  const accessToken = jwtHelpers.generateToken(
+    {
+      email: userData.email,
+      role: userData.role,
+    },
+    "secret_Key_For_Access_Token",
+    "5m"
+  );
+
+  return {
+    accessToken,
+    needPasswordChange: userData.needPasswordChange,
+  };
 };
 //-----------------------------------------------------
 
