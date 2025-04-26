@@ -26,14 +26,31 @@ const loginUser = async (payload: { email: string; password: string }) => {
       email: userData.email,
       role: userData.role,
     },
-    "secretKey",
+    "secretKeyForAccessToken",
     {
       algorithm: "HS256",
-      expiresIn: "15m",
+      expiresIn: "5m",
     }
   );
 
-  console.log(accessToken);
+  //create refresh token with jwt
+  const refreshToken = jwt.sign(
+    {
+      email: userData.email,
+      role: userData.role,
+    },
+    "secret_Key_For_Refresh_Token",
+    {
+      algorithm: "HS256",
+      expiresIn: "7d",
+    }
+  );
+
+  return {
+    accessToken,
+    refreshToken,
+    needPasswordChange: userData.needPasswordChange,
+  };
 };
 
 export const AuthServices = {
