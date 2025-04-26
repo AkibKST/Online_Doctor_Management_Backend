@@ -1,10 +1,15 @@
 import { Admin, Prisma, UserStatus } from "../../../../generated/prisma";
 import { paginationHelpers } from "../../../helpers/paginationHelper";
 import prisma from "../../../sharedUtils/prisma";
+import { IPaginationOptions } from "../../interface/pagination";
 import { adminSearchAbleFields } from "./admin.constant";
+import { IAdminFilterRequest } from "./admin.interface";
 
 //get all admin from db with sorting , pagination and filtering
-const getAllFromDB = async (params: any, options: any) => {
+const getAllFromDB = async (
+  params: IAdminFilterRequest,
+  options: IPaginationOptions
+) => {
   const { limit, page, skip } = paginationHelpers.calculatePagination(options);
 
   //if searchTerm is present in query params, then add it to the where condition
