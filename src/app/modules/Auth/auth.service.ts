@@ -4,6 +4,7 @@ import AppError from "../../error/AppError";
 import httpStatus from "http-status";
 import { jwtHelpers } from "../../../helpers/jwtHelpers";
 
+//Login user service
 const loginUser = async (payload: { email: string; password: string }) => {
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
@@ -46,7 +47,15 @@ const loginUser = async (payload: { email: string; password: string }) => {
     needPasswordChange: userData.needPasswordChange,
   };
 };
+//----------------------------------------------------
+
+//refresh token service
+const refreshToken = async (token: string) => {
+  console.log(token);
+};
+//-----------------------------------------------------
 
 export const AuthServices = {
   loginUser,
+  refreshToken,
 };
