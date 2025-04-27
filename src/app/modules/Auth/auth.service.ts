@@ -4,6 +4,8 @@ import AppError from "../../error/AppError";
 import httpStatus from "http-status";
 import { jwtHelpers } from "../../../helpers/jwtHelpers";
 import { UserStatus } from "../../../../generated/prisma";
+import config from "../../../config";
+import { Secret } from "jsonwebtoken";
 
 //Login user service
 const loginUser = async (payload: { email: string; password: string }) => {
@@ -29,8 +31,8 @@ const loginUser = async (payload: { email: string; password: string }) => {
       email: userData.email,
       role: userData.role,
     },
-    "secret_Key_For_Access_Token",
-    "5m"
+    config.jwt.jwt_secret as Secret,
+    config.jwt.expires_in as string
   );
 
   //create refresh token with jwt
@@ -39,8 +41,8 @@ const loginUser = async (payload: { email: string; password: string }) => {
       email: userData.email,
       role: userData.role,
     },
-    "secret_Key_For_refresh_Token",
-    "30d"
+    config.jwt.refresh_token_secret as Secret,
+    config.jwt.refresh_token_expires_in as string
   );
 
   return {
@@ -55,7 +57,10 @@ const loginUser = async (payload: { email: string; password: string }) => {
 const refreshToken = async (token: string) => {
   let decodedData;
   try {
-    decodedData = jwtHelpers.verifyToken(token, "secret_Key_For_refresh_Token");
+    decodedData = jwtHelpers.verifyToken(
+      token,
+      config.jwt.refresh_token_secret as Secret
+    );
   } catch (err) {
     throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!");
   }
@@ -72,8 +77,8 @@ const refreshToken = async (token: string) => {
       email: userData.email,
       role: userData.role,
     },
-    "secret_Key_For_Access_Token",
-    "5m"
+    config.jwt.jwt_secret as Secret,
+    config.jwt.expires_in as string
   );
 
   return {
