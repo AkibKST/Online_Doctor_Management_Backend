@@ -23,6 +23,7 @@ const auth = (...roles: string[]) => {
         config.jwt.jwt_secret as Secret
       );
 
+      //set user in request object
       req.user = verifiedUser;
 
       if (roles.length && !roles.includes(verifiedUser.role)) {
